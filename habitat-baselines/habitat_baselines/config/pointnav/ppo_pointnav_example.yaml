@@ -19,12 +19,13 @@ habitat_baselines:
   num_environments: 1
   checkpoint_folder: "data/new_checkpoints"
   num_updates: -1
-  total_num_steps: 1e6
+  total_num_steps: 500 #1e6
   log_interval: 10
   num_checkpoints: 50
   # Force PyTorch to be single threaded as
   # this improves performance considerably
   force_torch_single_threaded: True
+  evaluate: True
 
   eval:
     video_option: [ "disk", "tensorboard" ]
@@ -48,3 +49,18 @@ habitat_baselines:
       use_linear_clip_decay: True
       use_linear_lr_decay: True
       reward_window_size: 50
+
+    ddppo:
+      sync_frac: 0.6
+      # The PyTorch distributed backend to use
+      distrib_backend: NCCL
+      # Visual encoder backbone
+      pretrained_weights: data/ddppo-models/gibson-rgbd-best.pth
+      # Initialize with pretrained weights
+      pretrained: True
+      # Initialize just the visual encoder backbone with pretrained weights
+      pretrained_encoder: True
+      # Whether the visual encoder backbone will be trained.
+      train_encoder: False
+      # Whether to reset the critic linear layer
+      reset_critic: False
